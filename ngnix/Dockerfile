@@ -6,7 +6,10 @@ RUN apk update
 RUN apk add nginx
 
 COPY nginx.conf /etc/nginx/nginx.conf
-#COPY nginx.conf /usr/local/nginx/conf/nginx.conf
+# copy entire folder
+#COPY ./nginx /etc/nginx/conf.d
+# onl yif i built ngninx myself, but i didnt
+# COPY nginx.conf /usr/local/nginx/conf/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
 COPY ./html/index.html /usr/share/nginx/html/index.html
 
