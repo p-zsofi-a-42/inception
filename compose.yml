@@ -1,0 +1,48 @@
+services:
+
+  nginx:
+    container_name: ngnix_1
+    # would need to use "image:ngnix" if I built from official. Then no Dockerfile needed.
+    build: ./ngnix
+    # Automatically restart this container if Server reboot	/ crash; (manual shutdown/docker stop -> ewmaines stopped
+    restart: unless-stopped
+    #env_file: .env
+    #environment:
+
+  db:
+    container_name: mariadb
+    build: 
+      # path for commands in the Dockerfile
+      context: ./mariadb_1
+      dockerfile: ./Dockerfile
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: pass
+      MYSQL_ROOT_PASSWORD: rootpass
+    volumes:
+      #- db:/var/lib/mariadb
+      # the data will be stored on th ehost not just inside a single instance of a running container
+      - db:/var/lib/mysql
+  
+  wordpress:
+    container_name: wordpress_1
+    depends_on:
+    - db
+    build: 
+      context: ./wordpress
+      dockerfile: ./Dockerfile
+    ports:
+     - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress_db
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: pass
+    volumes:
+      - wordpress:/var/www/html
+
+volumes:
+  wordpress:
+  db:

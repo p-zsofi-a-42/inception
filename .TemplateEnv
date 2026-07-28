@@ -1,0 +1,8 @@
+#MySQL/MariaDB
+
+MYSQL_HOST=localhost
+MYSQL_PORT=0000
+MYSQL_USER=username
+MYSQL_PASSWORD=password
+MYSQL_DATABASE=database
+MYSQL_ROOT_PASSWORD=passwordForRoot

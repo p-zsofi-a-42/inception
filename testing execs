@@ -1,0 +1,14 @@
+docker build -t testimage .
+docker run --name testname -p 8080:80 testimage
+docker exec -it testname sh
+docker stop testname && docker rm testname && docker rmi testimage
+docker build -t testimage . && docker run -d --name testname -p 8080:80 testimage
+
+mariadb
+
+docker build -t ti-maria .
+docker run --name tn-maria -p 3333:3306 ti-maria
+docker exec -it tn-maria sh
+docker stop tn-maria && docker rm tn-maria && docker rmi ti-maria
+docker build -t ti-maria . && docker run -it -d --name tn-maria -p 3333:3306 ti-maria
+
