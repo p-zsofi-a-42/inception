@@ -1,16 +1,19 @@
 # Defining base image
-FROM alpine:3.23
+FROM debian:bookworm
 
 #
-RUN apk update
-RUN apk add nginx
+RUN apt update
+RUN apt install nginx -y
 
-COPY nginx.conf /etc/nginx/nginx.conf
 # copy entire folder
 #COPY ./nginx /etc/nginx/conf.d
 # onl yif i built ngninx myself, but i didnt
 # COPY nginx.conf /usr/local/nginx/conf/nginx.conf
+
+# configuration files
+COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
+
 COPY ./html/index.html /usr/share/nginx/html/index.html
 
 # Working directory inside container
