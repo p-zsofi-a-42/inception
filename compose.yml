@@ -17,10 +17,10 @@ services:
       dockerfile: ./Dockerfile
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wpuser
-      MYSQL_PASSWORD: pass
-      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     volumes:
       #- db:/var/lib/mariadb
       # the data will be stored on th ehost not just inside a single instance of a running container
@@ -38,8 +38,8 @@ services:
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_NAME: wordpress_db
-      WORDPRESS_DB_USER: wpuser
-      WORDPRESS_DB_PASSWORD: pass
+      WORDPRESS_DB_USER: ${DB_USER}
+      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
     volumes:
       - wordpress:/var/www/html
 
