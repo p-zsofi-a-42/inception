@@ -1,19 +1,21 @@
 services:
 
   nginx:
-    container_name: ngnix_1
+    container_name: nginx_1
     # would need to use "image:ngnix" if I built from official. Then no Dockerfile needed.
-    build: ./ngnix
+    build: ./nginx
+    ports:
+     - 8080:80
     # Automatically restart this container if Server reboot	/ crash; (manual shutdown/docker stop -> ewmaines stopped
     restart: unless-stopped
     #env_file: .env
     #environment:
 
   db:
-    container_name: mariadb
+    container_name: mariadb_1
     build: 
       # path for commands in the Dockerfile
-      context: ./mariadb_1
+      context: ./mariadb
       dockerfile: ./Dockerfile
     restart: unless-stopped
     environment:
@@ -33,8 +35,7 @@ services:
     build: 
       context: ./wordpress
       dockerfile: ./Dockerfile
-    ports:
-     - 8080:80
+    restart: unless-stopped
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_NAME: wordpress_db
