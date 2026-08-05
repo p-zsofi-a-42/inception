@@ -1,2 +1,50 @@
+Debian releses: https://www.debian.org/releases/
+
+# NGNIX
+	https://nginx.org/en/
+
+	ngnix install: https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
+
+	ngnix config file:
+	https://docs.nginx.com/nginx/admin-guide/web-server/web-server/
+
+	config and ssl
+	https://github.com/SimulatedGREG/nginx-cheatsheet
+
+	encription
+	https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04
+
+	serving static content/ forwarding  fastcgi
+	https://nginx.org/en/docs/beginners_guide.html
+
+# Docker
+	https://docs.docker.com/build/concepts/overview/
+	secrets: https://docs.docker.com/reference/compose-file/build/#secrets
+
+# WP
+PHP: Hypertext Preprocessor, is the programming language that powers WordPress. The engine that makes WordPress run 
+- Process WordPress code. 
+- Communicate with your database to retrieve content.
+- Generate the HTML that displays in visitors’ browsers.
+- Handle form submissions and user logins.
+
 install wp:
 https://developer.wordpress.org/advanced-administration/before-install/howto-install/
+
+install wp tutorial with values to setup
+https://portforwarded.com/install-wordpress-on-ubuntu-22-04-lts-lamp-stack/
+
+SSL certificate
+https://www.codeable.io/blog/wordpress-ssl-certificate/
+
+# mariadb
+The database stores everything from your posts and pages to comments, user profiles, and plugin settings.
+
+docs: https://mariadb.com/docs
+
+setup database: https://utho.com/docs/database/mariadb/install-mariadb-on-debian-10
+
+
+
+To remove all WordPress data, delete the named volumes by passing the -v parameter:
+	$ docker compose down -v
