@@ -18,7 +18,7 @@ docker build -t ti-wp .
 docker run --name tn-wp -p 9000:9090 ti-wp
 docker exec -it tn-wp sh
 docker stop tn-wp && docker rm tn-wp && docker rmi ti-wp
-docker build -t ti-wp . && docker run -it -d --name tn-wp -p 3333:3306 ti-wp
+docker build -t ti-wp . && docker run -it -d --name tn-wp -p 9000:9090 ti-wp
 
 ngnix
 
@@ -26,5 +26,5 @@ docker build -t ti-ng .
 docker run --name tn-ng -p 8081:80 ti-ng
 docker exec -it tn-ng sh
 docker stop tn-ng && docker rm tn-ng && docker rmi ti-ng
-docker build -t ti-ng . && docker run -it -d --name tn-ng -p 3333:3306 ti-ng
+docker build -t ti-ng . && docker run -it -d --name tn-ng -p 8081:80 ti-ng
 
