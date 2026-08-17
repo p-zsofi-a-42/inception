@@ -33,7 +33,8 @@ COPY ./html/index.html /usr/share/nginx/html/index.html
 EXPOSE 80
 
 # Run the application
-CMD ["nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx"]
 
 # docker build -t testimage .
 # docker run --name testname -p 8080:80 testimage

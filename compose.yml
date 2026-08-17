@@ -3,7 +3,9 @@ services:
   nginx:
     container_name: nginx_1
     # would need to use "image:ngnix" if I built from official. Then no Dockerfile needed.
-    build: ./nginx
+    build: 
+      context: ./ngnix
+      dockerfile: ./Dockerfile
     ports:
      - 8080:80
     # Automatically restart this container if Server reboot	/ crash; (manual shutdown/docker stop -> ewmaines stopped
