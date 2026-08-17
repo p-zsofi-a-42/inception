@@ -7,5 +7,6 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 
 fi
 
+
 #??
-exec php-fpm -F
+#exec php-fpm -F

@@ -19,13 +19,15 @@ RUN apt install -y \
 	php-mbstring \
 	php-xml \
 	php-intl \
-	php-zip
+	php-zip \
+	wget
 
 # Download latest wordpress version
 RUN wget https://wordpress.org/latest.tar.gz
 # Extract 
 RUN tar -xzvf latest.tar.gz
 
+RUN mkdir -p /var/www/html
 RUN mv wordpress/* /var/www/html/
 
 COPY ./setup.sh /setup.sh
@@ -35,4 +37,5 @@ RUN chmod +x /setup.sh
 EXPOSE 9000
 
 # Run the application
-ENTRYPOINT ["/setup.sh"]
+#ENTRYPOINT ["/setup.sh"]
+ENTRYPOINT ["tail", "-f", "/dev/null"]
