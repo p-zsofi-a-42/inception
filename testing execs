@@ -25,9 +25,9 @@ docker build -t ti-wp . && docker run -it -d --name tn-wp -p 9000:9090 ti-wp
 ngnix
 
 docker build -t ti-ng .
-docker run -d --name tn-ng -p 8081:80 -p 443:443 ti-ng
+docker run -d --name tn-ng -p 8081:80 -p 4430:443 ti-ng
 docker exec -it tn-ng sh
 docker stop tn-ng && docker rm tn-ng
 docker stop tn-ng && docker rm tn-ng && docker rmi ti-ng
-docker build -t ti-ng . && docker run -it -d --name tn-ng -p 8081:80 ti-ng
+docker build -t ti-ng . && docker run -it -d --name tn-ng -p 8081:80 -p 4430:443 ti-ng
 

@@ -84,3 +84,5 @@ the digital signature used, instead of being from a CA, would be the website's o
 Data encrypted with the public key can only be decrypted with the private key.<br>
 Encryption: SSL certificates facilitate the public-private key pairing. Clients (such as web browsers) reference the file, get the public key necessary to open a TLS connection from a server's SSL certificate.<br>
 Authentication: SSL certificates verify that a client is talking to the correct server that actually owns the domain. This helps prevent domain spoofing and other kinds of attacks.
+
+[IP redirection](https://ikarthiks.medium.com/configuring-nginx-for-ip-redirection-and-domain-configuration-53e0beb4ed81)

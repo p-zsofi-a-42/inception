@@ -14,7 +14,13 @@ RUN apt install nginx -y
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
 
-COPY ./html/index.html /usr/share/nginx/html/index.html
+COPY ./html/index.html /var/www/html/index.html
+#: This folder is only used when building from nginx image
+#COPY ./html/index.html /usr/share/nginx/html/index.html
+
+RUN mkdir -p /etc/nginx/ssl
+COPY ./ssl/zpalotas.key /etc/nginx/ssl/zpalotas.key
+COPY ./ssl/zpalotas.crt /etc/nginx/ssl/zpalotas.crt
 
 # Working directory inside container
 #WORKDIR /app
@@ -31,6 +37,7 @@ COPY ./html/index.html /usr/share/nginx/html/index.html
 
 # Documentation: listening port 
 EXPOSE 80
+EXPOSE 443
 
 # Run the application
 #CMD ["nginx", "-g", "daemon off;"]
