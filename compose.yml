@@ -4,7 +4,7 @@ services:
     container_name: nginx_1
     # would need to use "image:ngnix" if I built from official. Then no Dockerfile needed.
     build: 
-      context: ./ngnix
+      context: ./nginx
       dockerfile: ./Dockerfile
     ports:
      - 8080:80
