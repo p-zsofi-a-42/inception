@@ -5,6 +5,8 @@ Debian releses: https://www.debian.org/releases/
 
 	ngnix install: https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
 
+	https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-debian-11
+
 	ngnix config file:
 	https://docs.nginx.com/nginx/admin-guide/web-server/web-server/
 
@@ -48,3 +50,37 @@ setup database: https://utho.com/docs/database/mariadb/install-mariadb-on-debian
 
 To remove all WordPress data, delete the named volumes by passing the -v parameter:
 	$ docker compose down -v
+
+
+
+# [SSL](https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/) 
+(or TLS) a protocol for encrypting Internet traffic and verifying server identity. <br>
+Websites with HTTPS web address uses SSL/TLS encryption. more sequre than HTTP<br>
+To keep user data secure, verify ownership of the website, prevent attackers from creating a fake version of the site, and gain user trust.<br>
+All traffic to and from the website will be encrypted and secure.<br>
+
+## SSL certificate
+The certificate (file) (hosted in a website's origin server) includes:
+- The domain name that the certificate was issued for
+- Which person, organization, or device it was issued to
+- Which certificate authority (CA) issued it
+- CA's digital signature
+- Associated subdomains
+- Issue date
+- Expiration date
+- The public key (the private key is kept secret)
+Need to obtain it from a certificate authority (CA). A CA is an outside organization, a trusted third party, that generates and gives out + signes SSL certificates with their private key.<br>
+### Self-signed certificates
+the digital signature used, instead of being from a CA, would be the website's own private key
+- anyone can create their own SSL certificate
+- no outside authority to verify that the origin server is who it claims to be. Browsers don't consider them trustworthy. -> creates suspicion in visitor
+- free and quick to implement
+- used mostly on non-consumer facing sites
+- ! still able to encrypt data as the other, payed and verified certificates do
+- does not expire 
+[Tutorial on self-signed certificate](https://www.sectigo.com/blog/what-is-a-self-signed-certificate)
+
+## Process
+Data encrypted with the public key can only be decrypted with the private key.<br>
+Encryption: SSL certificates facilitate the public-private key pairing. Clients (such as web browsers) reference the file, get the public key necessary to open a TLS connection from a server's SSL certificate.<br>
+Authentication: SSL certificates verify that a client is talking to the correct server that actually owns the domain. This helps prevent domain spoofing and other kinds of attacks.

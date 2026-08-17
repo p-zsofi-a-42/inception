@@ -7,24 +7,27 @@ docker build -t testimage . && docker run -d --name testname -p 8080:80 testimag
 mariadb
 
 docker build -t ti-maria .
-docker run --name tn-maria -p 3333:3306 ti-maria
+docker run -d --name tn-maria -p 3333:3306 ti-maria
 docker exec -it tn-maria sh
+docker stop tn-maria && docker rm tn-maria
 docker stop tn-maria && docker rm tn-maria && docker rmi ti-maria
 docker build -t ti-maria . && docker run -it -d --name tn-maria -p 3333:3306 ti-maria
 
 wp
 
 docker build -t ti-wp .
-docker run --name tn-wp -p 9000:9090 ti-wp
+docker run -d --name tn-wp -p 9000:9090 ti-wp
 docker exec -it tn-wp sh
+docker stop tn-wp && docker rm tn-wp
 docker stop tn-wp && docker rm tn-wp && docker rmi ti-wp
 docker build -t ti-wp . && docker run -it -d --name tn-wp -p 9000:9090 ti-wp
 
 ngnix
 
 docker build -t ti-ng .
-docker run --name tn-ng -p 8081:80 ti-ng
+docker run -d --name tn-ng -p 8081:80 -p 443:443 ti-ng
 docker exec -it tn-ng sh
+docker stop tn-ng && docker rm tn-ng
 docker stop tn-ng && docker rm tn-ng && docker rmi ti-ng
 docker build -t ti-ng . && docker run -it -d --name tn-ng -p 8081:80 ti-ng
 
