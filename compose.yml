@@ -13,6 +13,9 @@ services:
     restart: unless-stopped
     #env_file: .env
     #environment:
+    volumes:
+      #: Take the volume named wordpress and reflect it in this location inside the container
+      - wordpress:/var/www/html
 
   db:
     container_name: mariadb_1

@@ -7,6 +7,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 
 fi
 
-
+#: Starting the php-fpm service
+service php8.2-fpm start
 #??
 #exec php-fpm -F
