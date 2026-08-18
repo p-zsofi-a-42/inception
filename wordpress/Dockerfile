@@ -27,6 +27,7 @@ RUN wget https://wordpress.org/latest.tar.gz
 # Extract 
 RUN tar -xzvf latest.tar.gz
 
+#: Populating the volume
 RUN mkdir -p /var/www/html
 RUN mv wordpress/* /var/www/html/
 

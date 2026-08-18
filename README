@@ -86,3 +86,14 @@ Encryption: SSL certificates facilitate the public-private key pairing. Clients 
 Authentication: SSL certificates verify that a client is talking to the correct server that actually owns the domain. This helps prevent domain spoofing and other kinds of attacks.
 
 [IP redirection](https://ikarthiks.medium.com/configuring-nginx-for-ip-redirection-and-domain-configuration-53e0beb4ed81)
+
+
+# MARIDB
+
+MariaDB is a database management system (DBMS) that understands SQL.
+(NOTE: both mariadb and mysql commands lauch the mariadb client)
+
+# WordPress
+
+[Before you install](https://developer.wordpress.org/advanced-administration/before-install/)
+[How to install](https://developer.wordpress.org/advanced-administration/before-install/howto-install/)
