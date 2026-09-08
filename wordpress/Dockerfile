@@ -38,5 +38,6 @@ RUN chmod +x /setup.sh
 EXPOSE 9000
 
 # Run the application
-#ENTRYPOINT ["/setup.sh"]
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+ENTRYPOINT ["/setup.sh"]
+#CMD ["./php-fpm"]
+#ENTRYPOINT ["tail", "-f", "/dev/null"]
