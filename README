@@ -23,6 +23,11 @@ Debian releses: https://www.debian.org/releases/
 	https://docs.docker.com/build/concepts/overview/
 	secrets: https://docs.docker.com/reference/compose-file/build/#secrets
 
+	Why [--no-cache](https://medium.com/@rajesh.sgr/understanding-docker-no-cache-eb4f35b90a9d?sk=44b164046510b6d1b20f55f5b03a1133)?
+	Each instruction in a Dockerfile creates a new layer. Docker stores these locally on machine. <br>
+	On running docker build: checks whether the instruction and the files involved have changed. No? then use cached -> sometimes this introduces bugs
+	
+	Why avpóid 'tail -f'
 # WP
 PHP: Hypertext Preprocessor, is the programming language that powers WordPress. The engine that makes WordPress run 
 - Process WordPress code. 
@@ -97,3 +102,5 @@ MariaDB is a database management system (DBMS) that understands SQL.
 
 [Before you install](https://developer.wordpress.org/advanced-administration/before-install/)
 [How to install](https://developer.wordpress.org/advanced-administration/before-install/howto-install/)
+[wp-config setup](https://developer.wordpress.org/apis/wp-config-php/)
+- [available settings](https://developer.wordpress.org/advanced-administration/wordpress/wp-config/)
