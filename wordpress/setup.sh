@@ -5,13 +5,15 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 <?php
 /** Telling wordpress how to connect to the db */
 
-define('WORDPRESS_DB_NAME',		'${DB_NAME}');
-define('WORDPRESS_DB_USER',		'${DB_USER}');
-define('WORDPRESS_DB_PASSWORD',	'${DB_PASSWORD}');
+define('DB_NAME',		'${WORDPRESS_DB_NAME}');
+define('DB_USER',		'${WORDPRESS_DB_USER}');
+define('DB_PASSWORD',	'${WORDPRESS_DB_PASSWORD}');
 /** MySQL hostname(:port if needed) */
-define('WORDPRESS_DB_HOST',		'${DB_HOST}');
+define('DB_HOST',		'${WORDPRESS_DB_HOST}');
 /** “The WordPress admin area and login must use HTTPS. (just a safeguard, in case in the future the port 80 will also be opened” */
 define('FORCE_SSL_ADMIN', true);
+/** Finding and loading wp-config.php. Load WordPress's main initialization/bootstrap*/
+require_once ABSPATH . 'wp-settings.php';
 ?>
 EOF
 
