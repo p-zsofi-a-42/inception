@@ -14,6 +14,8 @@ fclean:
 re:		fclean all
 # rebuild containers, keep volume
 new:	down
-	@docker compose build --no-cache
+#	@docker compose build --no-cache
+	docker compose build
+	@$(MAKE) all
 
 .PHONY:	all ps down fclean re new

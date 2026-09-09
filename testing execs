@@ -31,3 +31,5 @@ docker stop tn-ng && docker rm tn-ng
 docker stop tn-ng && docker rm tn-ng && docker rmi ti-ng
 docker build -t ti-ng . && docker run -it -d --name tn-ng -p 8081:80 -p 4430:443 ti-ng
 
+checking logs
+docker logs wordpress_1
