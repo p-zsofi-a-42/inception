@@ -28,6 +28,9 @@ Debian releses: https://www.debian.org/releases/
 	On running docker build: checks whether the instruction and the files involved have changed. No? then use cached -> sometimes this introduces bugs
 	
 	Why avpóid 'tail -f'
+
+	named volumes: 
+	 File-copying in the dockerfiles are build time, runtime mounts the container and the mounted volume becomes what the container sees at /var/www/html.
 # WP
 PHP: Hypertext Preprocessor, is the programming language that powers WordPress. The engine that makes WordPress run 
 - Process WordPress code. 

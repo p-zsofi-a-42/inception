@@ -7,6 +7,9 @@ services:
     build: 
       context: ./nginx
       dockerfile: ./Dockerfile
+    #probably not needed
+    #depends_on:
+    #- wordpress
     ports:
      - 8080:80
      - 443:443

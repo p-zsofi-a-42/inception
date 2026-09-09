@@ -33,3 +33,9 @@ docker build -t ti-ng . && docker run -it -d --name tn-ng -p 8081:80 -p 4430:443
 
 checking logs
 docker logs wordpress_1
+
+#to see all the implaced values
+docker compose config
+
+#check the content of the volume
+docker run --rm -v github_wordpress:/data alpine ls -la /data
