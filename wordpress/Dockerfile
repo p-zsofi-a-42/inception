@@ -29,7 +29,7 @@ RUN tar -xzvf latest.tar.gz
 
 #: Populating the volume
 RUN mkdir -p /var/www/html
-RUN mv wordpress/* /var/www/html/
+RUN cp -a wordpress/* /var/www/html/
 
 COPY ./setup.sh /setup.sh
 RUN chmod +x /setup.sh

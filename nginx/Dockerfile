@@ -14,7 +14,6 @@ RUN apt install nginx -y
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/default.conf
 
-COPY ./html/index.html /var/www/html/index.html
 #: This folder is only used when building from nginx image
 #COPY ./html/index.html /usr/share/nginx/html/index.html
 
