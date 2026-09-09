@@ -2,6 +2,7 @@ services:
 
   nginx:
     container_name: nginx_1
+    image: my-nginx
     # would need to use "image:ngnix" if I built from official. Then no Dockerfile needed.
     build: 
       context: ./nginx
@@ -19,11 +20,13 @@ services:
 
   db:
     container_name: mariadb_1
+    image: my-db
     build: 
       # path for commands in the Dockerfile
       context: ./mariadb
       dockerfile: ./Dockerfile
     restart: unless-stopped
+    #makes the env variables available inside the container (for eg. setup.sh)
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USER}
@@ -36,6 +39,7 @@ services:
   
   wordpress:
     container_name: wordpress_1
+    image: my-wordpress
     depends_on:
     - db
     build: 
