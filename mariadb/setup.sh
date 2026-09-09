@@ -12,6 +12,9 @@
 #	sleep 1
 #done
 
+# Making sure the runtime socket directory exists and MariaDB can write to it.
+mkdir -p /run/mysqld
+chown mysql:mysql /run/mysqld
 
 #: without "IF NOT EXIST" on possible multiple run of the script the command will fail (not omit the cmd or overwrite the og)
 #: my db is stored as a volume so even if the container is deleted and freshly recreated the db exists
