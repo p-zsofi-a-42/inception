@@ -39,5 +39,3 @@ EXPOSE 9000
 
 # Run the application
 ENTRYPOINT ["/setup.sh"]
-#CMD ["./php-fpm"]
-#ENTRYPOINT ["tail", "-f", "/dev/null"]
