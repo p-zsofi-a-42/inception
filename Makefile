@@ -1,5 +1,6 @@
 # Start everything in background
 all:	
+	cd nginx/ssl && bash ssl_certificate_gen.sh
 	@docker compose up -d
 # See running containers
 ps:		

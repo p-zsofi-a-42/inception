@@ -19,8 +19,8 @@ COPY ./html/index.html /var/www/html/index.html
 #COPY ./html/index.html /usr/share/nginx/html/index.html
 
 RUN mkdir -p /etc/nginx/ssl
-COPY ./ssl/zpalotas.key /etc/nginx/ssl/zpalotas.key
-COPY ./ssl/zpalotas.crt /etc/nginx/ssl/zpalotas.crt
+COPY ssl/zpalotas.key /etc/nginx/ssl/zpalotas.key
+COPY ssl/zpalotas.crt /etc/nginx/ssl/zpalotas.crt
 
 # Working directory inside container
 #WORKDIR /app
@@ -40,6 +40,7 @@ EXPOSE 80
 EXPOSE 443
 
 # Run the application
+# no need bc nginx has deamon off
 #CMD ["nginx", "-g", "daemon off;"]
 CMD ["nginx"]
 

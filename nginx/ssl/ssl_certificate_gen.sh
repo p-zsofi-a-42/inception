@@ -20,7 +20,7 @@ openssl req -nodes -new \
 	-key zpalotas.key \
 	-out zpalotas.csr \
 	-subj "/CN=zpalotas.42.fr" \
-	-addext "subjectAltName=DNS:zpalotas.42.fr"
+	-addext "subjectAltName=DNS:zpalotas.42.fr,DNS:www.zpalotas.42.fr,DNS:localhost,IP:127.0.0.1"
 
 #: Create the certificate
 #: valid for x days
