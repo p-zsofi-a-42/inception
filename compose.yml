@@ -4,6 +4,8 @@ services:
     container_name: nginx_1
     image: my-nginx
     # would need to use "image:ngnix" if I built from official. Then no Dockerfile needed.
+    depends_on:
+    - wordpress
     build: 
       context: ./nginx
       dockerfile: ./Dockerfile
