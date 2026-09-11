@@ -53,13 +53,13 @@ The database stores everything from your posts and pages to comments, user profi
 docs: https://mariadb.com/docs
 
 setup database: https://utho.com/docs/database/mariadb/install-mariadb-on-debian-10
-
+[healthcheck](https://mariadb.com/docs/server/server-management/automated-mariadb-deployment-and-administration/docker-and-mariadb/using-healthcheck-sh)
 
 
 To remove all WordPress data, delete the named volumes by passing the -v parameter:
 	$ docker compose down -v
 
-
+[Configuratio file](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/configuring-mariadb/configuring-mariadb-with-option-files)
 
 # [SSL](https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/) 
 (or TLS) a protocol for encrypting Internet traffic and verifying server identity. <br>
@@ -107,3 +107,6 @@ MariaDB is a database management system (DBMS) that understands SQL.
 [How to install](https://developer.wordpress.org/advanced-administration/before-install/howto-install/)
 [wp-config setup](https://developer.wordpress.org/apis/wp-config-php/)
 - [available settings](https://developer.wordpress.org/advanced-administration/wordpress/wp-config/)
+
+
+if ports for db and wp would be published in compose, then external access could happen (depending on firewall). we only need nginx, and the rest is resolved internally through the network

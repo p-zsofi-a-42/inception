@@ -39,3 +39,6 @@ docker compose config
 
 #check the content of the volume
 docker run --rm -v github_wordpress:/data alpine ls -la /data
+
+# to see what the image has in the volume before starting the cintainer
+docker run --rm --entrypoint /bin/sh my-wordpress -c 'ls /var/www/html | head -20'
