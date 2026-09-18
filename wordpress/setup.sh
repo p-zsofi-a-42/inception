@@ -22,6 +22,8 @@ fi
 
 #NOTE: [php -l /var/www/html/wp-config.php] can check whether the PHP file is syntactically valid
 
+# Change this folder's ownership to wp so it can write it, for image uploads, plugins, themes, so on
+chown -R www-data:www-data /var/www/html
 
 #: Starting the php-fpm service | -F keeping in foreground
 exec php-fpm8.2 -F 
