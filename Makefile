@@ -2,21 +2,32 @@
 all:	
 	cd nginx/ssl && bash ssl_certificate_gen.sh
 	@docker compose up -d
-# See running containers
-ps:		
-	@docker compose ps
-# Stop/remove containers and networks
+# stop but keep containers
+stop:
+	@docker compose stop
+# remove containers and networks
 down:	
 	@docker compose down
 # Stop/remove containers + volumes
-fclean:	
-	@docker compose down -v
+fclean:
+	@read -p "Are you sure you want to remove the volumes and all their data? [y/N] " ans; \
+	case $$ans in \
+		[yY]|[yY][eE][sS]) @docker compose down -v ;; \
+		*) echo "Cancelled." ;; \
+	esac
+
 # remove everything and build new
 re:		fclean all
-# rebuild containers, keep volume
-new:	down
-#	@docker compose build --no-cache
-	docker compose build
-	@$(MAKE) all
+# remove everything + volumes + build images completely from zero
+long-re: 	fclean
+	@docker compose build --no-cache
+	@make all
+build-re:	fclean
+	@docker compose build
+	@make all
+# rebuild containers, keep volume, see logs
+debug:	down
+	@docker compose build
+	@docker compose up
 
-.PHONY:	all ps down fclean re new
+.PHONY:	all stop down fclean re long-re build-re debug

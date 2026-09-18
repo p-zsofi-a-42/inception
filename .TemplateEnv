@@ -1,8 +1,9 @@
 #MySQL/MariaDB
 
-DB_HOST=localhost
+DB_HOST=name-of-the-docker-compose-database-service
 DB_PORT=0000
-DB_USER=username
-DB_PASSWORD=password
 DB_DATABASE=database
+DB_USER=username
+# Special characters may interfere with SQL/PHP quoting. Avoid [ ' and \ and $ ]	
+DB_PASSWORD=password
 DB_ROOT_PASSWORD=passwordForRoot

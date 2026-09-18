@@ -110,3 +110,5 @@ MariaDB is a database management system (DBMS) that understands SQL.
 
 
 if ports for db and wp would be published in compose, then external access could happen (depending on firewall). we only need nginx, and the rest is resolved internally through the network
+
+Be careful with special characters in WORDPRESS_DB_PASSWORD. Because you're generating PHP source, a password containing ', backslashes, etc. can break the resulting PHP.
