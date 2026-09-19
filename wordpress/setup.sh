@@ -1,5 +1,9 @@
 #!/bin/sh
 
+WORDPRESS_DB_NAME=$(cat /run/secrets/db-dbname)
+WORDPRESS_DB_USER=$(cat /run/secrets/db-username)
+WORDPRESS_DB_PASSWORD=$(cat /run/secrets/db-password)
+
 # we don't do COPY on this because then substituted values (=secrets) would be baked into the image -> create upon container start
 if [ ! -f /var/www/html/wp-config.php ]; then
 	cat > /var/www/html/wp-config.php <<EOF

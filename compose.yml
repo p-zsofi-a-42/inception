@@ -31,12 +31,17 @@ services:
       context: ./mariadb
       dockerfile: ./Dockerfile
     restart: unless-stopped
+    secrets:
+      - db-username
+      - db-password
+      - db-rootpassword
+      - db-dbname
     #makes the env variables available inside the container (for eg. setup.sh)
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    #environment:
+      #MYSQL_DATABASE: ${DB_DATABASE}
+      #MYSQL_USER: ${DB_USER}
+      #MYSQL_PASSWORD: ${DB_PASSWORD}
+      #MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     # --connect Active when an external user can connect to the TCP port of MariaDB Server. This strictly tests the TCP connection, not authentication.
     # --innodb_initialized True when InnoDB has completed initializing, including any rollback or crash recover
     healthcheck:
@@ -60,15 +65,29 @@ services:
       context: ./wordpress
       dockerfile: ./Dockerfile
     restart: unless-stopped
+    secrets:
+      - db-username
+      - db-password
+      - db-dbname
     environment:
       WORDPRESS_DB_HOST: ${DB_HOST}
       WORDPRESS_DB_PORT: ${DB_PORT}
-      WORDPRESS_DB_NAME: ${DB_DATABASE}
-      WORDPRESS_DB_USER: ${DB_USER}
-      WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
+      #WORDPRESS_DB_NAME: ${DB_DATABASE}
+      #WORDPRESS_DB_USER: ${DB_USER}
+      #WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
     volumes:
       - wordpress:/var/www/html
 
 volumes:
   wordpress:
   db:
+
+secrets:
+  db-username: 
+    file: ./secrets/secret-username.txt
+  db-password:
+    file: ./secrets/secret-password.txt
+  db-rootpassword:
+    file: ./secrets/secret-rootpassword.txt
+  db-dbname:
+    file: ./secrets/secret-dbname.txt

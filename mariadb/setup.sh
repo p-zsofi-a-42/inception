@@ -3,8 +3,13 @@
 # This script is used to initialize the database. 
 echo "=== DB INIT SCRIPT VERSION 005 ==="
 
+# gets the value from compose secrets
+MYSQL_USER=$(cat /run/secrets/db-username)
+MYSQL_PASSWORD=$(cat /run/secrets/db-password)
+MYSQL_ROOT_PASSWORD=$(cat /run/secrets/db-rootpassword)
+MYSQL_DATABASE=$(cat /run/secrets/db-dbname)
 # Exit immediately this script if something fails
-#set -e
+set -e
 
 # data directory initialization. Creating the initial system database files that MariaDB needs before the server can properly run.
 if [ ! -d /var/lib/mysql/mysql ]; then
