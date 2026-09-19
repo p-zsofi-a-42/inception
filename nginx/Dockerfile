@@ -18,8 +18,14 @@ COPY default.conf /etc/nginx/conf.d/default.conf
 #COPY ./html/index.html /usr/share/nginx/html/index.html
 
 RUN mkdir -p /etc/nginx/ssl
-COPY ssl/zpalotas.key /etc/nginx/ssl/zpalotas.key
-COPY ssl/zpalotas.crt /etc/nginx/ssl/zpalotas.crt
+COPY ssl_certificate_gen.sh /etc/nginx/ssl/ssl_certificate_gen.sh
+
+# install openssl inside
+RUN apt install openssl
+# set working directory so key anr crt get created in correct directory
+WORKDIR /etc/nginx/ssl
+RUN chmod +x ssl_certificate_gen.sh
+RUN ./ssl_certificate_gen.sh
 
 # Working directory inside container
 #WORKDIR /app
