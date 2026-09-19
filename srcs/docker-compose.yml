@@ -6,7 +6,7 @@ services:
     depends_on:
     - wordpress
     build: 
-      context: ./nginx
+      context: ./requirements/nginx
       dockerfile: ./Dockerfile
     ports:
      - 443:443
@@ -18,12 +18,12 @@ services:
     networks:
       - my-website
 
-  db:
+  mariadb:
     container_name: mariadb
-    image: db
+    image: mariadb
     build: 
       # path for commands in the Dockerfile
-      context: ./mariadb
+      context: ./requirements/mariadb
       dockerfile: ./Dockerfile
     restart: unless-stopped
     secrets:
@@ -40,7 +40,7 @@ services:
       retries: 5
     volumes:
       # the data will be stored on th ehost not just inside a single instance of a running container
-      - db:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     networks:
       - my-website
   
@@ -48,10 +48,10 @@ services:
     container_name: wordpress
     image: wordpress
     depends_on:
-      db:
+      mariadb:
         condition: service_healthy
     build: 
-      context: ./wordpress
+      context: ./requirements/wordpress
       dockerfile: ./Dockerfile
     restart: unless-stopped
     secrets:
@@ -60,7 +60,7 @@ services:
       - db-dbname
     #makes the env variables available inside the container (for eg. setup.sh)
     environment:
-      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_HOST: mariadb
       WORDPRESS_DB_PORT: ${DB_PORT}
     volumes:
       - wordpress:/var/www/html
@@ -69,17 +69,17 @@ services:
 
 volumes:
   wordpress:
-  db:
+  mariadb:
 
 networks:
   my-website:
 
 secrets:
   db-username: 
-    file: ./secrets/secret-username.txt
+    file: ../secrets/secret-username.txt
   db-password:
-    file: ./secrets/secret-password.txt
+    file: ../secrets/secret-password.txt
   db-rootpassword:
-    file: ./secrets/secret-rootpassword.txt
+    file: ../secrets/secret-rootpassword.txt
   db-dbname:
-    file: ./secrets/secret-dbname.txt
+    file: ../secrets/secret-dbname.txt
