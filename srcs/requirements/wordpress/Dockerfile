@@ -4,6 +4,7 @@ FROM debian:bookworm
 RUN apt update
 
 # - php-fpm 		# PHP FastCGI Process Manager (PHP-FPM), which runs the PHP code
+# - php-cli			# command line interface
 # - php-mysql 		# php connection to db
 # - php-curl 		# http requests to other servers
 # - php-gd			# image manipulation
@@ -13,6 +14,7 @@ RUN apt update
 # - php-zip			# handle zip archives
 RUN apt install -y \
     php-fpm \
+	php-cli \
     php-mysql \
 	php-curl \
 	php-gd \
@@ -26,6 +28,11 @@ RUN apt install -y \
 RUN wget https://wordpress.org/latest.tar.gz
 # Extract 
 RUN tar -xzvf latest.tar.gz
+
+# fetch wp cmd
+RUN wget -O /usr/local/bin/wp \
+      https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+ && chmod +x /usr/local/bin/wp
 
 #: Populating the volume
 RUN mkdir -p /var/www/html
