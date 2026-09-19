@@ -3,22 +3,15 @@ services:
   nginx:
     container_name: nginx
     image: nginx
-    # would need to use "image:ngnix" if I built from official. Then no Dockerfile needed.
     depends_on:
     - wordpress
     build: 
       context: ./nginx
       dockerfile: ./Dockerfile
-    #probably not needed
-    #depends_on:
-    #- wordpress
     ports:
      - 443:443
-   #  - 8080:80
     # Automatically restart this container if Server reboot	/ crash; (manual shutdown/docker stop -> ewmaines stopped
     restart: unless-stopped
-    #env_file: .env
-    #environment:
     volumes:
       #: Take the volume named wordpress and reflect it in this location inside the container
       - wordpress:/var/www/html
@@ -38,12 +31,6 @@ services:
       - db-password
       - db-rootpassword
       - db-dbname
-    #makes the env variables available inside the container (for eg. setup.sh)
-    #environment:
-      #MYSQL_DATABASE: ${DB_DATABASE}
-      #MYSQL_USER: ${DB_USER}
-      #MYSQL_PASSWORD: ${DB_PASSWORD}
-      #MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     # --connect Active when an external user can connect to the TCP port of MariaDB Server. This strictly tests the TCP connection, not authentication.
     # --innodb_initialized True when InnoDB has completed initializing, including any rollback or crash recover
     healthcheck:
@@ -52,7 +39,6 @@ services:
       timeout: 3s
       retries: 5
     volumes:
-      #- db:/var/lib/mariadb
       # the data will be stored on th ehost not just inside a single instance of a running container
       - db:/var/lib/mysql
     networks:
@@ -62,7 +48,6 @@ services:
     container_name: wordpress
     image: wordpress
     depends_on:
-      #- db
       db:
         condition: service_healthy
     build: 
@@ -73,12 +58,10 @@ services:
       - db-username
       - db-password
       - db-dbname
+    #makes the env variables available inside the container (for eg. setup.sh)
     environment:
       WORDPRESS_DB_HOST: db
       WORDPRESS_DB_PORT: ${DB_PORT}
-      #WORDPRESS_DB_NAME: ${DB_DATABASE}
-      #WORDPRESS_DB_USER: ${DB_USER}
-      #WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
     volumes:
       - wordpress:/var/www/html
     networks:
