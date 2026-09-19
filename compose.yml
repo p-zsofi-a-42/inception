@@ -1,8 +1,8 @@
 services:
 
   nginx:
-    container_name: nginx_1
-    image: my-nginx
+    container_name: nginx
+    image: nginx
     # would need to use "image:ngnix" if I built from official. Then no Dockerfile needed.
     depends_on:
     - wordpress
@@ -26,8 +26,8 @@ services:
       - my-website
 
   db:
-    container_name: mariadb_1
-    image: my-db
+    container_name: mariadb
+    image: db
     build: 
       # path for commands in the Dockerfile
       context: ./mariadb
@@ -59,8 +59,8 @@ services:
       - my-website
   
   wordpress:
-    container_name: wordpress_1
-    image: my-wordpress
+    container_name: wordpress
+    image: wordpress
     depends_on:
       #- db
       db:
