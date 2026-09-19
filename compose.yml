@@ -39,11 +39,11 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     # --connect Active when an external user can connect to the TCP port of MariaDB Server. This strictly tests the TCP connection, not authentication.
     # --innodb_initialized True when InnoDB has completed initializing, including any rollback or crash recover
-    #healthcheck:
-    #  test: ["CMD", "mariadb-admin", "ping", "-h", "127.0.0.1", "--silent"]
-    #  interval: 5s
-    #  timeout: 3s
-    #  retries: 5
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     volumes:
       #- db:/var/lib/mariadb
       # the data will be stored on th ehost not just inside a single instance of a running container
@@ -53,9 +53,9 @@ services:
     container_name: wordpress_1
     image: my-wordpress
     depends_on:
-      - db
-      #db:
-      #  condition: service_healthy
+      #- db
+      db:
+        condition: service_healthy
     build: 
       context: ./wordpress
       dockerfile: ./Dockerfile
