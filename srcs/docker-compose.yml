@@ -69,10 +69,24 @@ services:
 
 volumes:
   wordpress:
+#    name: wordpress
+#    driver: local
+#    driver_opts:
+#      type: none
+#      o: bind
+#      device: /home/zpalotas/data/wordpress
   mariadb:
+#    name: mariadb
+#    driver: local
+#    driver_opts:
+#      type: none
+#      o: bind
+#      device: /home/zpalotas/data/mariadb
 
 networks:
   my-website:
+    name: my-website
+    driver: bridge
 
 secrets:
   db-username: 
