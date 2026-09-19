@@ -31,6 +31,14 @@ Debian releses: https://www.debian.org/releases/
 
 	named volumes: 
 	 File-copying in the dockerfiles are build time, runtime mounts the container and the mounted volume becomes what the container sees at /var/www/html.
+
+	 You can use secrets to manage any sensitive data which a container needs at runtime but you don't want to store in the image or in source control, such as:
+
+		- Usernames and passwords
+		- TLS certificates and keys
+		- SSH keys
+		- Other important data such as the name of a database or internal server
+		- Generic strings or binary content (up to 500 kb in size)
 # WP
 PHP: Hypertext Preprocessor, is the programming language that powers WordPress. The engine that makes WordPress run 
 - Process WordPress code. 
