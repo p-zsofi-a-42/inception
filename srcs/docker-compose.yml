@@ -34,7 +34,7 @@ services:
     # --connect Active when an external user can connect to the TCP port of MariaDB Server. This strictly tests the TCP connection, not authentication.
     # --innodb_initialized True when InnoDB has completed initializing, including any rollback or crash recover
     healthcheck:
-      test: ["CMD", "mariadb-admin", "ping", "-h", "127.0.0.1", "--silent"]
+      test: ["CMD-SHELL", "mariadb-admin ping --silent --socket=/run/mysqld/mysqld.sock"]
       interval: 5s
       timeout: 3s
       retries: 5
