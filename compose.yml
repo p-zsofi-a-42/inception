@@ -22,6 +22,8 @@ services:
     volumes:
       #: Take the volume named wordpress and reflect it in this location inside the container
       - wordpress:/var/www/html
+    networks:
+      - my-website
 
   db:
     container_name: mariadb_1
@@ -53,6 +55,8 @@ services:
       #- db:/var/lib/mariadb
       # the data will be stored on th ehost not just inside a single instance of a running container
       - db:/var/lib/mysql
+    networks:
+      - my-website
   
   wordpress:
     container_name: wordpress_1
@@ -77,10 +81,15 @@ services:
       #WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
     volumes:
       - wordpress:/var/www/html
+    networks:
+      - my-website
 
 volumes:
   wordpress:
   db:
+
+networks:
+  my-website:
 
 secrets:
   db-username: 
