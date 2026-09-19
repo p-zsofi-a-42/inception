@@ -4,7 +4,18 @@ set -eu
 
 mkdir -p secrets
 
-for secret in username password rootpassword dbname; do
+for secret in \
+	username \
+	password \
+	rootpassword \
+	dbname \
+	wp_admin_user \
+	wp_admin_password \
+	wp_admin_email \
+	wp_user \
+	wp_user_password \
+	wp_user_email
+ do
 	file="secrets/secret-$secret.txt"
 
 	if [ ! -e "$file" ]; then
