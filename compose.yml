@@ -74,7 +74,7 @@ services:
       - db-password
       - db-dbname
     environment:
-      WORDPRESS_DB_HOST: ${DB_HOST}
+      WORDPRESS_DB_HOST: db
       WORDPRESS_DB_PORT: ${DB_PORT}
       #WORDPRESS_DB_NAME: ${DB_DATABASE}
       #WORDPRESS_DB_USER: ${DB_USER}
