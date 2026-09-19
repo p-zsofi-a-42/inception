@@ -1,5 +1,6 @@
 # Start everything in background
-all:	
+all:
+	@sh ./set-secrets-and-environments.sh
 	@docker compose up -d
 # stop but keep containers
 stop:
@@ -11,7 +12,7 @@ down:
 fclean:
 	@read -p "Are you sure you want to remove the volumes and all their data? [y/N] " ans; \
 	case $$ans in \
-		[yY]|[yY][eE][sS]) @docker compose down -v ;; \
+		[yY]|[yY][eE][sS]) docker compose down -v ;; \
 		*) echo "Cancelled." ;; \
 	esac
 
@@ -29,4 +30,11 @@ debug:	down
 	@docker compose build
 	@docker compose up
 
-.PHONY:	all stop down fclean re long-re build-re debug
+# removes all containers and images
+long-debug:	down
+	@docker rmi db
+	@docker rmi nginx
+	@docker rmi wordpress
+	@make debug
+
+.PHONY:	all stop down fclean re long-re build-re debug long-debug
