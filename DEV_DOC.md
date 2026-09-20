@@ -2,6 +2,14 @@
 
 This file explains how to set up and work on the project from a developer point of view.
 
+## About the project services
+
+- `nginx` serves the HTTPS site
+- `wordpress` installs and runs WordPress
+- `mariadb` stores the app data
+
+The stack is started with Docker Compose and is designed to be managed through the Makefile.
+
 ## Project layout
 
 The repository contains:
@@ -39,34 +47,24 @@ Constraints:
   entrypoint exits with an error if it does.
 - Avoid `'`, `\` and `$` in passwords: the values pass through both shell
   and SQL.
-- Note `secrets/*` and .env is already gitignored
+- Note: `secrets/*` and .env is already gitignored
 
 ### 4. Build and start
 
-```sh
-make
-```
+Useful targets in the Makefile:
 
-This runs the secret setup script and starts the stack with Docker Compose.
+- `make`		: set up credentials if needed, start all the services with Docker Compose
+- `make stop`	: stop containers, pause serving the website
+- `make down`	: stop/remove containers and network, keep data
+- `make fclean`	: delete containers, images and volumes; destroys data
+- `make re`		: delete containers, images and volumes; destroys data and rebuild the service
 
-Useful commands:
-
-```sh
-make stop
-make down
-make fclean
-make re
-```
-
-## Using the Makefile
-
-Common targets:
-
-- `make`: build and start everything
-- `make stop`: stop containers
-- `make down`: stop/remove containers and network, keep data
-- `make fclean`: remove containers, images and volumes; destroys data
-- `make re`: delete data and restart
+You can also do the same using docker compose commands, ran from the `/srcs` folder:
+- `docker compose --env-file .env up --build -d` (you need to already have populated secret files for this) 
+- `docker compose stop`
+- `docker compose down`
+- `docker compose down -v --rmi all`
+- `docker compose down -v --rmi all && docker compose up --build -d` 
 
 ## Container and volume management
 
@@ -114,11 +112,3 @@ You can inspect the current Docker volumes:
 docker volume inspect srcs_wordpress
 docker volume inspect srcs_mariadb
 ```
-
-## About the project services
-
-- `nginx` serves the HTTPS site
-- `wordpress` installs and runs WordPress
-- `mariadb` stores the app data
-
-The stack is started with Docker Compose and is designed to be managed through the Makefile.
