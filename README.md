@@ -1,126 +1,91 @@
-_This project has been created as part
-of the 42 curriculum by zpalotas_
+_This project was created as part of the 42 curriculum by zpalotas._
 
+# Inception
 
-Debian releses: https://www.debian.org/releases/
+## Description
 
-# NGNIX
-	https://nginx.org/en/
+This project deploys a small WordPress website with Docker Compose. Its goal is to run three cooperating services:
 
-	ngnix install: https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-16-04
+- **Nginx**: the only public entry point; terminates HTTPS and forwards PHP requests.
+- **WordPress**: runs PHP-FPM and serves the WordPress application.
+- **MariaDB**: stores WordPress posts, users, settings, and other application data.
 
-	https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-debian-11
+The services are built from the Debian Bookworm image. The source for each service is under [`srcs/requirements/`](srcs/requirements/), while [`srcs/docker-compose.yml`](srcs/docker-compose.yml) defines the services, network, secrets, healthcheck, and persistent storage.
 
-	ngnix config file:
-	https://docs.nginx.com/nginx/admin-guide/web-server/web-server/
+Nginx publishes port `443`. WordPress and MariaDB are reachable only through the internal Docker bridge network. A self-signed certificate is generated for local HTTPS use, so browsers display a certificate warning.
 
-	config and ssl
-	https://github.com/SimulatedGREG/nginx-cheatsheet
+### Main design choices
 
-	encription
-	https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04
+- **Docker Compose** defines a reproducible multi-container application.
+- **Separate services** keep the web server, PHP runtime, and database independently configurable.
+- **Docker secrets** provide credentials at runtime instead of placing passwords in the image or Compose environment.
+- **A healthcheck** makes WordPress wait until MariaDB is ready.
+- **Persistent storage** keeps WordPress files and MariaDB data across container recreation.
+- **Nginx as the public boundary** avoids publishing database and PHP-FPM ports to the host.
 
-	serving static content/ forwarding  fastcgi
-	https://nginx.org/en/docs/beginners_guide.html
+## Project description
 
-# Docker
-	https://docs.docker.com/build/concepts/overview/
-	secrets: https://docs.docker.com/reference/compose-file/build/#secrets
+| Choice | Used here | Alternative and trade-off |
+| --- | --- | --- |
+| Virtual machine vs Docker | Docker shares the host kernel, starts quickly, and isolates each service in a lightweight container. | A virtual machine includes a complete guest OS and usually provides stronger isolation, but needs more memory and starts more slowly. |
+| Secrets vs environment variables | Passwords are mounted as files under `/run/secrets`; non-sensitive settings such as `DB_PORT` remain in `srcs/.env`. | Environment variables are convenient, but can be exposed through inspection, logs, or process tooling. They are appropriate here for non-secret configuration. |
+| Docker network vs host network | Services use a private bridge network and communicate by service name, such as `wordpress:9000` and `mariadb`. | Host networking removes network isolation and exposes services directly on the host network. |
+| Docker volumes vs bind mounts | Compose declares named volumes backed by `/home/zpalotas/data/wordpress` and `/home/zpalotas/data/mariadb`. | A pure Docker-managed volume hides the host path; a direct bind mount gives explicit host control but couples the stack to that path. |
 
-	Why [--no-cache](https://medium.com/@rajesh.sgr/understanding-docker-no-cache-eb4f35b90a9d?sk=44b164046510b6d1b20f55f5b03a1133)?
-	Each instruction in a Dockerfile creates a new layer. Docker stores these locally on machine. <br>
-	On running docker build: checks whether the instruction and the files involved have changed. No? then use cached -> sometimes this introduces bugs
-	
-	Why avpóid 'tail -f'
+## Instructions
 
-	named volumes: 
-	 File-copying in the dockerfiles are build time, runtime mounts the container and the mounted volume becomes what the container sees at /var/www/html.
+DEV_DOC.md and USER_DOC.md provide detailed instructions on how to run the project.
 
-	 You can use secrets to manage any sensitive data which a container needs at runtime but you don't want to store in the image or in source control, such as:
+To inspect or stop the stack:
 
-		- Usernames and passwords
-		- TLS certificates and keys
-		- SSH keys
-		- Other important data such as the name of a database or internal server
-		- Generic strings or binary content (up to 500 kb in size)
-# WP
-PHP: Hypertext Preprocessor, is the programming language that powers WordPress. The engine that makes WordPress run 
-- Process WordPress code. 
-- Communicate with your database to retrieve content.
-- Generate the HTML that displays in visitors’ browsers.
-- Handle form submissions and user logins.
+```sh
+docker compose -f srcs/docker-compose.yml --env-file srcs/.env ps
+docker compose -f srcs/docker-compose.yml --env-file srcs/.env logs
+docker compose -f srcs/docker-compose.yml --env-file srcs/.env down
+```
 
-install wp:
-https://developer.wordpress.org/advanced-administration/before-install/howto-install/
+The website is available at [https://zpalotas.42.fr](https://zpalotas.42.fr). The self-signed certificate warning is expected. Database and WordPress data are stored under `/home/zpalotas/data/`.
 
-install wp tutorial with values to setup
-https://portforwarded.com/install-wordpress-on-ubuntu-22-04-lts-lamp-stack/
+## Resources
 
-SSL certificate
-https://www.codeable.io/blog/wordpress-ssl-certificate/
+A non-extensive list of useful links which helped in understanding the project's components
 
-# mariadb
-The database stores everything from your posts and pages to comments, user profiles, and plugin settings.
+### Docker and Debian
 
-docs: https://mariadb.com/docs
+- [Debian releases](https://www.debian.org/releases/) — base distribution information.
+- [Docker build overview](https://docs.docker.com/build/concepts/overview/) — images and build layers.
+- [Compose secrets](https://docs.docker.com/reference/compose-file/build/#secrets) — runtime secret handling.
+- [Docker volumes](https://docs.docker.com/engine/storage/volumes/) — persistent container storage.
+- [Docker build cache](https://medium.com/@rajesh.sgr/understanding-docker-no-cache-eb4f35b90a9d?sk=44b164046510b6d1b20f55f5b03a113) — why `--no-cache` can help diagnose stale layers.
 
-setup database: https://utho.com/docs/database/mariadb/install-mariadb-on-debian-10
-[healthcheck](https://mariadb.com/docs/server/server-management/automated-mariadb-deployment-and-administration/docker-and-mariadb/using-healthcheck-sh)
+### Nginx and HTTPS
 
+- [Nginx official site](https://nginx.org/en/) — project documentation.
+- [Nginx beginner's guide](https://nginx.org/en/docs/beginners_guide.html) — static files and request handling.
+- [Nginx web server configuration](https://docs.nginx.com/nginx/admin-guide/web-server/web-server/) — server configuration concepts.
+- [Nginx configuration cheatsheet](https://github.com/SimulatedGREG/nginx-cheatsheet) — quick configuration reference.
+- [Nginx on Debian](https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-debian-11) — installation background.
+- [HTTPS with Let's Encrypt](https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04) — certificate deployment background.
+- [SSL/TLS explained](https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/) — encryption and authentication.
+- [Self-signed certificates](https://www.sectigo.com/blog/what-is-a-self-signed-certificate) — local-development certificates.
+- [IP and domain routing](https://ikarthiks.medium.com/ip-redirection-and-domain-configuration-53e0beb4ed81) — host and domain routing concepts.
 
-To remove all WordPress data, delete the named volumes by passing the -v parameter:
-	$ docker compose down -v
+### WordPress and PHP
 
-[Configuratio file](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/configuring-mariadb/configuring-mariadb-with-option-files)
+- [WordPress prerequisites](https://developer.wordpress.org/advanced-administration/before-install/) — installation requirements.
+- [WordPress installation](https://developer.wordpress.org/advanced-administration/before-install/howto-install/) — installation procedure.
+- [WordPress installation tutorial](https://portforwarded.com/install-wordpress-on-ubuntu-22-04-lts-lamp-stack/) — example deployment walkthrough.
+- [`wp-config.php` API](https://developer.wordpress.org/apis/wp-config-php/) — configuration reference.
+- [WordPress configuration settings](https://developer.wordpress.org/advanced-administration/wordpress/wp-config/) — available settings.
+- [WordPress SSL background](https://www.codeable.io/blog/wordpress-ssl-certificate/) — HTTPS considerations for WordPress.
 
-# [SSL](https://www.cloudflare.com/learning/ssl/what-is-an-ssl-certificate/) 
-(or TLS) a protocol for encrypting Internet traffic and verifying server identity. <br>
-Websites with HTTPS web address uses SSL/TLS encryption. more sequre than HTTP<br>
-To keep user data secure, verify ownership of the website, prevent attackers from creating a fake version of the site, and gain user trust.<br>
-All traffic to and from the website will be encrypted and secure.<br>
+### MariaDB
 
-## SSL certificate
-The certificate (file) (hosted in a website's origin server) includes:
-- The domain name that the certificate was issued for
-- Which person, organization, or device it was issued to
-- Which certificate authority (CA) issued it
-- CA's digital signature
-- Associated subdomains
-- Issue date
-- Expiration date
-- The public key (the private key is kept secret)
-Need to obtain it from a certificate authority (CA). A CA is an outside organization, a trusted third party, that generates and gives out + signes SSL certificates with their private key.<br>
-### Self-signed certificates
-the digital signature used, instead of being from a CA, would be the website's own private key
-- anyone can create their own SSL certificate
-- no outside authority to verify that the origin server is who it claims to be. Browsers don't consider them trustworthy. -> creates suspicion in visitor
-- free and quick to implement
-- used mostly on non-consumer facing sites
-- ! still able to encrypt data as the other, payed and verified certificates do
-- does not expire 
-[Tutorial on self-signed certificate](https://www.sectigo.com/blog/what-is-a-self-signed-certificate)
+- [MariaDB documentation](https://mariadb.com/docs) — database reference.
+- [MariaDB installation on Debian](https://utho.com/docs/database/mariadb/install-mariadb-on-debian-10) — setup background.
+- [MariaDB Docker healthcheck](https://mariadb.com/docs/server/server-management/automated-mariadb-deployment-and-administration/docker-and-mariadb/using-healthcheck-sh) — readiness checks.
+- [MariaDB option files](https://mariadb.com/docs/server/server-management/install-and-upgrade-mariadb/configuring-mariadb/configuring-mariadb-with-option-files) — server configuration.
 
-## Process
-Data encrypted with the public key can only be decrypted with the private key.<br>
-Encryption: SSL certificates facilitate the public-private key pairing. Clients (such as web browsers) reference the file, get the public key necessary to open a TLS connection from a server's SSL certificate.<br>
-Authentication: SSL certificates verify that a client is talking to the correct server that actually owns the domain. This helps prevent domain spoofing and other kinds of attacks.
+### Use of AI
 
-[IP redirection](https://ikarthiks.medium.com/configuring-nginx-for-ip-redirection-and-domain-configuration-53e0beb4ed81)
-
-
-# MARIDB
-
-MariaDB is a database management system (DBMS) that understands SQL.
-(NOTE: both mariadb and mysql commands lauch the mariadb client)
-
-# WordPress
-
-[Before you install](https://developer.wordpress.org/advanced-administration/before-install/)
-[How to install](https://developer.wordpress.org/advanced-administration/before-install/howto-install/)
-[wp-config setup](https://developer.wordpress.org/apis/wp-config-php/)
-- [available settings](https://developer.wordpress.org/advanced-administration/wordpress/wp-config/)
-
-
-if ports for db and wp would be published in compose, then external access could happen (depending on firewall). we only need nginx, and the rest is resolved internally through the network
-
-Be careful with special characters in WORDPRESS_DB_PASSWORD. Because you're generating PHP source, a password containing ', backslashes, etc. can break the resulting PHP.
+AI assistance was used for editing documentation and code review tasks. plus explaining concepts.

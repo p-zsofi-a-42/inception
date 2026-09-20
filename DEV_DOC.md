@@ -64,9 +64,17 @@ You can also do the same using docker compose commands, ran from the `/srcs` fol
 - `docker compose stop`
 - `docker compose down`
 - `docker compose down -v --rmi all`
-- `docker compose down -v --rmi all && docker compose up --build -d` 
+- `docker compose down -v --rmi all && docker compose --env-file .env up --build -d` 
 
 ## Container and volume management
+
+To inspect or stop the stack:
+
+```sh
+docker compose -f srcs/docker-compose.yml --env-file srcs/.env ps
+docker compose -f srcs/docker-compose.yml --env-file srcs/.env logs
+docker compose -f srcs/docker-compose.yml --env-file srcs/.env down
+```
 
 List containers:
 
