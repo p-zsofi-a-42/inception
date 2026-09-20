@@ -8,13 +8,5 @@ port=3306
 # Directory where you want to put your data | This is our volume
 datadir=/var/lib/mysql
 
-#Not needed
-# Directory for the errmsg.sys file in the language you want to use
-#language=/usr/local/share/mysql/english
-
-# This is the prefix name to be used for all log, error and replication files
-#log-basename=mysqld
-
 # Enable logging by default to help find problems
 general-log
-#log-slow-queries

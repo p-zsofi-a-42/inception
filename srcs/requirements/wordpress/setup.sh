@@ -1,7 +1,7 @@
 #!/bin/sh
 # On first start it populates the named volume with WordPress core
-# writes wp-config.php
-# installs WordPress and creates two users ( administrator, regular )
+# - writes wp-config.php
+# - installs WordPress and creates two users ( administrator, regular )
 
 # don't continue if there is an error
 set -e

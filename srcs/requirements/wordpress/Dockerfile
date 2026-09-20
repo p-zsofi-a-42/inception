@@ -44,7 +44,7 @@ RUN chmod +x /setup.sh
 # Documentation: listening port 
 EXPOSE 9000
 
-# changing the php-fpm configuration to liste on the port 9000
+# Changing the php-fpm configuration to listen on the port 9000
 RUN sed -i 's|^listen = .*|listen = 9000|' /etc/php/8.2/fpm/pool.d/www.conf
 
 # Run the application

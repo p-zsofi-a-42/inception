@@ -1,27 +1,17 @@
 #!/bin/bash
 
+# This script is used to initialize the database.
+
 # Exit immediately this script if something fails
 set -e
 
-# This script is used to initialize the database.
-echo "=== DB INIT SCRIPT VERSION 006 ==="
-
-# gets the value from compose secrets
+# Getting the value from compose secrets
 MYSQL_USER=$(cat /run/secrets/db-username)
 MYSQL_PASSWORD=$(cat /run/secrets/db-password)
 MYSQL_ROOT_PASSWORD=$(cat /run/secrets/db-rootpassword)
 MYSQL_DATABASE=$(cat /run/secrets/db-dbname)
 
-# The Debian package already ships an initialized /var/lib/mysql inside the image,
-# and Docker copies that into the volume the first time it is used, so the presence
-# of the data directory says nothing about whether WE already set things up.
-# We drop our own marker file instead: it lives in the volume, so it survives
-# restarts and tells us the users and the database exist already.
-# This matters because the bootstrap below gives root a password: replaying it on a
-# later start would fail (root can no longer log in without one) and kill the container.
-INIT_FLAG=/var/lib/mysql/.inception-initialized
-
-# only needed when the volume is genuinely empty (nothing was copied into it)
+# Only needed when the volume is genuinely empty (nothing was copied into it)
 if [ ! -d /var/lib/mysql/mysql ]; then
 	mariadb-install-db --user=mysql --datadir=/var/lib/mysql
 fi
@@ -30,15 +20,21 @@ fi
 mkdir -p /run/mysqld
 chown mysql:mysql /run/mysqld
 
+# Setting up a custom init flag that lives persistently on the volume
+# to signal to ourselves if the db has been already initialized
+INIT_FLAG=/var/lib/mysql/.inception-initialized
+
 if [ ! -f "$INIT_FLAG" ]; then
 
-	# Temporarily don't accept TCP/network connections. Only during initial setup so that the database server is only accessible locally while you're configuring its users/passwords. Run in background (&)
+	# Temporarily don't accept TCP/network connections. 
+	# Only during initial setup so that the database server is only accessible locally 
+	# while you're configuring its users/passwords. Run in background (&)
 	mariadbd --user=mysql --skip-networking &
 
-	# saving the pid to kill it later
+	# Saving the pid to kill it later
 	TEMP_PID=$!
 
-	# waiting for mariadb to be up to be ready to accept connections, but not forever
+	# Waiting for mariadb to be up to be ready to accept connections, but not forever
 	for _ in $(seq 1 30); do
 		if mariadb-admin ping --silent 2>/dev/null; then
 			break
@@ -46,7 +42,7 @@ if [ ! -f "$INIT_FLAG" ]; then
 		sleep 1
 		echo "Waiting for DB..."
 	done
-	# fails the script (set -e) if the server never came up
+	# Fails the script (set -e) if the server never came up
 	mariadb-admin ping --silent
 
 	echo "DB is running..."
@@ -78,14 +74,16 @@ if [ ! -f "$INIT_FLAG" ]; then
 	FLUSH PRIVILEGES;
 EOF
 
-	# stopping the temporary setup server cleanly. root has a password now, so we use it.
+	# Stopping the temporary setup server cleanly. root has a password now, so we use it.
 	mariadb-admin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
-	# the server exits on its own, don't let a non-zero status abort the script
+	# The server exits on its own, don't let a non-zero status abort the script
 	wait "$TEMP_PID" || true
 
 	touch "$INIT_FLAG"
 	echo "Database initialized."
 fi
 
-# mariadb becomes pid 1 and stays alive || run Run MariaDB as the mysql Linux user; not as root || save logs to stdout/err
+# Mariadb becomes pid 1 and stays alive 
+# - run Run MariaDB as the mysql Linux user; not as root
+# - save logs to stdout/err
 exec mariadbd --user=mysql --console
