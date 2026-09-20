@@ -17,6 +17,8 @@ fclean:
 	@read -p "Are you sure you want to remove the volumes and all their data? [y/N] " ans; \
 	case $$ans in \
 		[yY]|[yY][eE][sS]) \
+			sudo rm -rf /home/zpalotas/data/mariadb; \
+			sudo rm -rf /home/zpalotas/data/wordpress; \
 			containers=$$(docker ps -qa); \
 			if [ -n "$$containers" ]; then docker stop $$containers; docker rm $$containers; fi; \
 			images=$$(docker images -qa); \
@@ -31,13 +33,14 @@ fclean:
 
 # remove everything and build new
 re:		fclean all
-# remove everything + volumes + build images completely from zero
+# remove everything + volumes + set new credentials + build images completely from zero
 long-re: 	fclean
+	@rm -f secrets/secret*
+	@rm -f srcs/.env
+	@sh ./set-secrets-and-environments.sh
 	@$(COMPOSE) build --no-cache
-	@make all
-build-re:	fclean
-	@$(COMPOSE) build
-	@make all
+	@$(COMPOSE) up -d 
+
 # rebuild containers, keep volume, see logs
 debug:	down
 	@$(COMPOSE) build
@@ -50,4 +53,4 @@ long-debug:	down
 	@docker rmi wordpress
 	@make debug
 
-.PHONY:	all stop down fclean re long-re build-re debug long-debug
+.PHONY:	all stop down fclean re long-re debug long-debug
