@@ -1,3 +1,5 @@
+name: inception
+
 services:
 
   nginx:
@@ -37,7 +39,6 @@ services:
       test: ["CMD-SHELL", "mariadb-admin ping --silent --socket=/run/mysqld/mysqld.sock"]
       interval: 5s
       timeout: 3s
-      retries: 5
     volumes:
       # the data will be stored on th ehost not just inside a single instance of a running container
       - mariadb:/var/lib/mysql
@@ -75,19 +76,19 @@ services:
 
 volumes:
   wordpress:
-#    name: wordpress
-#    driver: local
-#    driver_opts:
-#      type: none
-#      o: bind
-#      device: /home/zpalotas/data/wordpress
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/zpalotas/data/wordpress
   mariadb:
-#    name: mariadb
-#    driver: local
-#    driver_opts:
-#      type: none
-#      o: bind
-#      device: /home/zpalotas/data/mariadb
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/zpalotas/data/mariadb
 
 networks:
   my-website:
