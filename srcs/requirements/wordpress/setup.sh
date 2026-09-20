@@ -22,14 +22,31 @@ WP_USER=$(cat /run/secrets/wp_user)
 WP_USER_PASSWORD=$(cat /run/secrets/wp_user_password)
 WP_USER_EMAIL=$(cat /run/secrets/wp_user_email)
 
-# credentials validation
+# credentials validation: fail loudly at startup instead of looping forever
 case "$(echo "${WP_ADMIN_USER}" | tr '[:upper:]' '[:lower:]')" in
-	admin)
+	*admin*|*administrator*)
 		echo "[wordpress] ERROR: the administrator name '${WP_ADMIN_USER}' contains 'admin'."
-		echo "[wordpress] Edit secrets/wp_admin_user.txt and pick another name."
+		echo "[wordpress] Edit secrets/secret-wp_admin_user.txt and pick another name."
 		exit 1
 		;;
 esac
+
+if [ "${WP_ADMIN_USER}" = "${WP_USER}" ]; then
+	echo "[wordpress] ERROR: the administrator and the second user are both '${WP_USER}'."
+	echo "[wordpress] The subject requires two distinct users. Edit secrets/secret-wp_user.txt."
+	exit 1
+fi
+
+for pair in "wp_admin_email:${WP_ADMIN_EMAIL}" "wp_user_email:${WP_USER_EMAIL}"; do
+	case "${pair#*:}" in
+		?*@?*.?*) ;;
+		*)
+			echo "[wordpress] ERROR: '${pair#*:}' is not a valid email address."
+			echo "[wordpress] Edit secrets/secret-${pair%%:*}.txt."
+			exit 1
+			;;
+	esac
+done
 
 # we don't do COPY on this because then substituted values (=secrets) would be baked into the image -> create upon container start
 # --skip-check: the database may exist but be empty
@@ -54,14 +71,20 @@ if ! ${WP} core is-installed > /dev/null 2>&1; then
 		--admin_email="${WP_ADMIN_EMAIL}" \
 		--skip-email
 
+	echo "[wordpress] installation done."
+else
+	echo "[wordpress] existing installation found, skipping install."
+fi
+
+# Kept outside the block above so that a failure here is retried on the next start
+# instead of being skipped forever once WordPress itself is installed.
+if ! ${WP} user get "${WP_USER}" > /dev/null 2>&1; then
 	echo "[wordpress] creating second user '${WP_USER}'..."
 	${WP} user create "${WP_USER}" "${WP_USER_EMAIL}" \
 		--role=author \
 		--user_pass="${WP_USER_PASSWORD}"
-
-	echo "[wordpress] installation done."
 else
-	echo "[wordpress] existing installation found, skipping install."
+	echo "[wordpress] second user '${WP_USER}' already exists."
 fi
 
 # Change this folder's ownership to wp so it can write it, for image uploads, plugins, themes, so on
