@@ -29,15 +29,15 @@ for secret in \
 	fi
 done
 
-if [ ! -e .env ]; then
-	touch .env
+if [ ! -e srcs/.env ]; then
+	touch srcs/.env
 fi
 
-if [ ! -s .env ]; then
+if [ ! -s srcs/.env ]; then
 	printf 'Enter DB_PORT: '
 	IFS= read -r db_port
 
 	{
 		printf 'DB_PORT=%s\n' "$db_port"
-	} > .env
+	} > srcs/.env
 fi
