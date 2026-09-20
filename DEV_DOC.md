@@ -103,10 +103,90 @@ Check volume names:
 docker volume ls
 ```
 
-The project uses named volumes for persistent data:
+The project uses named volumes, backed by host directories, for persistent data:
 
-- `srcs_wordpress` for WordPress files
-- `srcs_mariadb` for the database
+- `wordpress` for WordPress files
+- `mariadb` for the database
+
+Check database:
+
+docker exec -it mariadb sh
+mariadb -u root -p"password for root"
+SHOW DATABASES;
+USE db;
+SHOW TABLES; 
+
+## Changing service ports
+
+The services communicate over the Docker network by service name. Change both
+ends of a connection when changing an internal port, and recreate the affected
+containers afterward.
+
+### MariaDB
+
+MariaDB currently listens on internal port `3306`. It is not published to the
+host by `docker-compose.yml`.
+
+1. Change `port` in `srcs/requirements/mariadb/99-custom.cnf`.
+2. Set the same value for `DB_PORT` in `srcs/.env`.
+3. If WordPress has already been installed, remove its generated configuration
+  so that it is recreated with the new database port:
+
+  ```sh
+  sudo rm /home/zpalotas/data/wordpress/wp-config.php
+  ```
+
+4. Rebuild and start the stack:
+
+  ```sh
+  make rebuild
+  ```
+
+Do not delete the whole WordPress data directory. The WordPress installation is
+stored there and should be retained unless a complete data reset is intended.
+
+### WordPress PHP-FPM
+
+WordPress currently listens for FastCGI connections on internal port `9000`.
+This port is used only between the `nginx` and `wordpress` containers.
+
+1. Change the PHP-FPM `listen` value in
+  `srcs/requirements/wordpress/Dockerfile`.
+2. Change the `fastcgi_pass` port in
+  `srcs/requirements/nginx/default.conf` to the same value.
+3. Rebuild and start the stack:
+
+  ```sh
+  make rebuild
+  ```
+
+### Nginx
+
+Nginx currently listens on container port `443`, and Docker publishes it as
+host port `443`.
+
+To change the external host port only, change the first number in the ports
+mapping in `srcs/docker-compose.yml`:
+
+```yaml
+ports:
+  - 8443:443
+```
+
+To change the internal Nginx port, change both the `listen` directive in
+`srcs/requirements/nginx/default.conf` and the second number in the Compose
+ports mapping. For example:
+
+```nginx
+listen 8443 ssl;
+```
+
+```yaml
+ports:
+  - 8443:8443
+```
+
+Then rebuild and start the stack with `make rebuild`.
 
 ## Where data is stored
 

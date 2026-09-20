@@ -41,6 +41,9 @@ long-re: 	fclean
 	@$(COMPOSE) build --no-cache
 	@$(COMPOSE) up -d 
 
+rebuild:
+	@$(COMPOSE) up -d --build --force-recreate
+	
 # rebuild containers, keep volume, see logs
 debug:	down
 	@$(COMPOSE) build
@@ -53,4 +56,4 @@ long-debug:	down
 	@docker rmi wordpress
 	@make debug
 
-.PHONY:	all stop down fclean re long-re debug long-debug
+.PHONY:	all stop down fclean re long-re debug long-debug rebuild
