@@ -36,10 +36,10 @@ validate() {
 }
 
 for secret in \
-	username \
-	password \
-	rootpassword \
-	dbname \
+	db_username \
+	db_password \
+	db_rootpassword \
+	db_dbname \
 	wp_admin_user \
 	wp_admin_password \
 	wp_admin_email \

@@ -97,13 +97,13 @@ networks:
 
 secrets:
   db-username: 
-    file: ../secrets/secret-username.txt
+    file: ../secrets/secret-db_username.txt
   db-password:
-    file: ../secrets/secret-password.txt
+    file: ../secrets/secret-db_password.txt
   db-rootpassword:
-    file: ../secrets/secret-rootpassword.txt
+    file: ../secrets/secret-db_rootpassword.txt
   db-dbname:
-    file: ../secrets/secret-dbname.txt
+    file: ../secrets/secret-db_dbname.txt
   wp_admin_user:
     file: ../secrets/secret-wp_admin_user.txt
   wp_admin_password:
