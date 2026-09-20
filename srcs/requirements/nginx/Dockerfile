@@ -21,7 +21,7 @@ RUN mkdir -p /etc/nginx/ssl
 COPY ssl_certificate_gen.sh /etc/nginx/ssl/ssl_certificate_gen.sh
 
 # install openssl inside
-RUN apt install openssl
+RUN apt install -y openssl
 # set working directory so key anr crt get created in correct directory
 WORKDIR /etc/nginx/ssl
 RUN chmod +x ssl_certificate_gen.sh
@@ -41,7 +41,6 @@ RUN ./ssl_certificate_gen.sh
 #COPY . .
 
 # Documentation: listening port 
-EXPOSE 80
 EXPOSE 443
 
 # Run the application
