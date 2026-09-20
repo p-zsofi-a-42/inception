@@ -46,7 +46,7 @@ EXPOSE 443
 # Run the application
 # no need bc nginx has deamon off
 #CMD ["nginx", "-g", "daemon off;"]
-CMD ["nginx"]
+ENTRYPOINT ["nginx"]
 
 # docker build -t testimage .
 # docker run --name testname -p 8080:80 testimage
